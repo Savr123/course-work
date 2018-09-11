@@ -1,0 +1,119 @@
+﻿<html>
+	<head>
+		<style>
+			table{
+				border-style:solid;
+				border-width:1px;
+				margin:0 auto;
+			}
+			.weekend{
+				color:red;
+			}
+			.gray{
+				color:grey;
+			}
+			td{
+				width:30px;
+				text-align:center;
+			}
+			
+			.today{
+				border:1px solid blue;
+				border-radius:50px;
+				padding-left:5px;
+				padding-right:5px;
+				
+			}
+			#hour{
+				color:green;
+			}
+			#min{
+				color:purple;
+			}
+			#sec{
+				color:orange;
+			}
+		</style>
+	</head>
+	<body>
+		<script>	
+			var d=new Date();
+			var year=d.getFullYear();
+			var month=8;
+			d.setMonth(8);
+			var dat=9;
+			var months=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+			var x=document;
+			x.write('<table>');			
+			x.write('<tr><th colspan=7 id="clock"><span id="hour">'+'</span><span id="min">'+'</span><span id="sec">'+'</span>');
+			//--- clock ---//
+			function update(){
+				var date = new Date();
+				let hour=x.getElementById('hour');
+				let min=x.getElementById('min');
+				let sec=x.getElementById('sec');
+				
+				var hours=date.getHours();
+				if (hours<10)
+					hours='0'+hours;
+				hour.innerHTML=hours+':';
+				var minutes=date.getMinutes();
+				if (minutes<10)
+					minutes='0'+minutes;
+				min.innerHTML=minutes+':';
+				var seconds=date.getSeconds();
+				if (seconds<10)
+					seconds="0"+seconds;
+				sec.innerHTML=seconds;
+			}
+
+			function ClockStart(){
+				timerId=setInterval(update,1000);
+				update();
+			}
+			function ClockStop(){
+				clearInterval(timerId);
+				timerId=null;
+			}
+			ClockStart();
+			//---
+			x.write('<tr><th colspan=7>'+months[month]+', '+year+'</th></tr>');
+			var days=['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+			var str='<tr>';
+			for (var j=0; j<7;j++){
+				if (j<5)
+					str+='<th>'+days[j]+'</th>'
+				else
+					str+='<th class="weekend">'+days[j]+'</th>'
+			}
+			str+='</tr>';
+			x.write(str);
+			d.setDate(1);
+			var day=d.getDay();
+			day=(6+day) % 7 +1;
+			d.setDate(d.getDate()-day);
+			for(var i=2;i<8;i++){
+				str='<tr>';
+				for( var j=0; j<7;j++){
+					d.setDate(d.getDate()+1);
+					if (d.getMonth()==month){
+					if (j<5) 
+						str+='<td>';
+					else
+						str+='<td class="weekend">';
+					if (d.getDate()==dat)
+						str+='<p class="today">';
+					str+=d.getDate()+'</td>';
+					}
+				else{
+					str+='<td class="gray">';
+					str+=d.getDate()+'</td>';
+				}
+				}
+				str+='</tr>';
+				x.write(str);
+			}
+			x.write('</table>')
+		</script>
+	</body>
+</html>
