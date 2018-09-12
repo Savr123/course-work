@@ -1,0 +1,208 @@
+<html>
+	<head>
+		<style>
+			table{
+				border-style:solid;
+				border-width:1px;
+				margin:0 auto;
+			}
+			
+			.weekend{
+				color:red;
+			}
+
+			.gray{
+				color:grey;
+			}
+
+			td{
+				width:32px;
+				text-align:center;
+				height:23px;
+			}
+
+			.today{
+				border:1px solid blue;
+				border-radius:50px;
+				padding-left:5px;
+				padding-right:5px;
+				width:1px;
+				height:1px;
+				
+			}
+			.arrow {
+			  padding:0;
+			  border-radius:20px;
+			  font-size:24px;
+			  line-height:24px;
+			  color: #444;
+			}
+
+			.arrow:focus {
+			  outline: none;
+			}
+
+			.arrow:hover {
+			  background: #ccc;
+			  cursor: pointer;
+			}
+		</style>
+	</head>
+	<body>
+		<table>
+			<tr>
+				<th></th>
+			</tr>
+			<tr>
+				<td>⇦</td>     <th></th>      <td>⇨</td>
+			</tr>
+			<tr>
+				<td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+			</tr>
+			<tr>
+				<td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+			</tr>
+			<tr>
+				<td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+			</tr>
+			<tr>
+				<td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+			</tr>
+			<tr>
+				<td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+			</tr>
+			<tr>
+				<td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+			</tr>
+		</table>
+		<script type="text/javascript">
+			var t=document.getElementsByTagName('table');
+			var d=new Date();
+			var year=d.getFullYear();
+			var currentYear=d.getFullYear();
+			var month=d.getMonth();
+			var currentMonth=d.getMonth();
+			var dat=d.getDate();
+			var months=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+			var days=['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+			t[0].rows[1].cells[1].colSpan=5;
+			
+			//-------------------------
+			//Календарь
+			function calendar(){
+				//-------------------------
+				//Месяц и год
+				t[0].rows[1].cells[1].innerHTML=months[month]+', '+year;
+				
+				//-------------------------
+				//Дни недели
+				for(var i=0;i<7;i++){
+					t[0].rows[2].cells[i].innerHTML=days[i];
+				}
+
+				//-------------------------
+				//Числа
+				d.setMonth(month);
+				d.setDate(1);
+				var day=d.getDay();
+				day=(6+day) % 7 +1;
+				d.setDate(d.getDate()-day);
+				for(var i=3;i<8;i++){
+					for(var j=0; j<7;j++){
+						d.setDate(d.getDate()+1);
+						if (d.getDate()==dat && d.getMonth()==currentMonth && d.getFullYear()==currentYear)
+							t[0].rows[i].cells[j].className="today";
+						else 
+							t[0].rows[i].cells[j].className="";
+						if (d.getMonth()==month){
+						if (j>=5) 
+							t[0].rows[i].cells[j].className="weekend";
+						t[0].rows[i].cells[j].innerHTML=d.getDate();
+						}
+					else{
+						t[0].rows[i].cells[j].className="gray";
+						t[0].rows[i].cells[j].innerHTML=d.getDate();
+					}
+					}
+				}
+			}	
+			calendar();
+
+			//-------------------------
+			//Часы
+			t[0].rows[0].cells[0].colSpan=7;
+			t[0].rows[0].cells[0].innerHTML='<span id="hour">'+'</span><span id="min">'+'</span><span id="sec">'+'</span>';
+
+			function update(){
+				var date = new Date();
+				let hour=document.getElementById('hour');
+				let min=document.getElementById('min');
+				let sec=document.getElementById('sec');
+				
+				var hours=date.getHours();
+				if (hours<10)
+					hours='0'+hours;
+				hour.innerHTML=hours+':';
+				var minutes=date.getMinutes();
+				if (minutes<10)
+					minutes='0'+minutes;
+				min.innerHTML=minutes+':';
+				var seconds=date.getSeconds();
+				if (seconds<10)
+					seconds="0"+seconds;
+				sec.innerHTML=seconds;
+			}
+
+			function ClockStart(){
+				timerId=setInterval(update,1000);
+				update();
+			}
+			function ClockStop(){
+				clearInterval(timerId);
+				timerId=null;
+			}
+			ClockStart();
+
+			//-------------------------
+			//Стрелки
+			t[0].rows[1].cells[0].className='arrow Prev';
+			t[0].rows[1].cells[2].className='arrow Next';
+			document.querySelector('.prev').onclick = function() {
+		    	//Влево
+		    	if (month==0){
+		    		month=11;
+		    		year-=1;
+		    	}
+		    	else
+		    		month-=1;
+		    	d.setFullYear(year);
+		    	d.setMonth(month);
+		    	calendar();
+		    }
+			document.querySelector('.next').onclick = function() {
+		    	//Вправо
+		    	if (month==11){
+		    		month=0;
+		    		year+=1;
+		    	}
+		    	else
+		    		month+=1;
+		    	d.setFullYear(year);
+		    	d.setMonth(month);
+		    	calendar();
+		    }
+		    document.querySelector('.next').keydown = function() {
+		    	//Вправо
+		    	if (month==11){
+		    		month=0;
+		    		year+=1;
+		    	}
+		    	else
+		    		month+=1;
+		    	d.setFullYear(year);
+		    	d.setMonth(month);
+		    	calendar();
+		    }
+		</script>
+	</body>
+</html>
