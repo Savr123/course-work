@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style>
+			table{
+				border-style:solid;
+				border-width:1px;
+				margin:0 auto;
+			}
+			
+			.weekend{
+				color:red;
+			}
+
+			.gray{
+				color:grey;
+			}
+
+			td{
+				width:32px;
+				text-align:center;
+				height:23px;
+			}
+
+			.today{
+				border:1px solid blue;
+				border-radius:50px;
+				padding-left:5px;
+				padding-right:5px;
+				width:1px;
+				height:1px;
+				
+			}
+			.arrow {
+			  padding:0;
+			  border-radius:20px;
+			  font-size:24px;
+			  line-height:24px;
+			  color: #444;
+			}
+
+			.arrow:focus {
+			  outline: none;
+			}
+
+			.arrow:hover {
+			  background: #ccc;
+			  cursor: pointer;
+			}
+		</style>
+</head>
+<body>
+	<div id='calendar'>
+		
+	</div>
+	<script type="text/javascript">
+		var d=new Date();
+		var year=d.getFullYear();
+		var currentYear=d.getFullYear();
+		var month=d.getMonth();
+		var currentMonth=d.getMonth();
+		var dat=d.getDate();
+		var months=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+		var days=['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+
+		var tb=document.createElement('table');
+		var td=document.createElement('td');
+		var tr=document.createElement('tr');
+		var pr=document.getElementById('calendar');
+		pr.appendChild(tb);
+		tb.cellSpacing='0';
+
+		//-------------------------
+		//Часы
+		td.colSpan=7;
+		span=document.createElement('span');
+		span.id='hour';
+		td.appendChild(span);
+		span=document.createElement('span');
+		span.id='min';
+		td.appendChild(span);
+		span=document.createElement('span');
+		span.id='sec';
+		td.appendChild(span);
+		tr.appendChild(td);
+		tb.appendChild(tr);
+
+		function update(){
+			var date = new Date();
+			let hour=document.getElementById('hour');
+			let min=document.getElementById('min');
+			let sec=document.getElementById('sec');
+			
+			var hours=date.getHours();
+			if (hours<10)
+				hours='0'+hours;
+			hour.innerHTML=hours+':';
+			var minutes=date.getMinutes();
+			if (minutes<10)
+				minutes='0'+minutes;
+			min.innerHTML=minutes+':';
+			var seconds=date.getSeconds();
+			if (seconds<10)
+				seconds="0"+seconds;
+			sec.innerHTML=seconds;
+		}
+		function ClockStart(){
+			timerId=setInterval(update,1000);
+			update();
+		}
+		function ClockStop(){
+			clearInterval(timerId);
+			timerId=null;
+		}
+		ClockStart();
+
+
+
+		//-------------------------
+		//Календарь
+		function calendar(){
+			tr=document.createElement('tr');
+			tb.appendChild(tr);
+
+			//-------------------------
+			//Стрелка влево
+			td=document.createElement('td');
+			td.className='arrow Prev';
+			td.innerHTML='⇦'
+			tr.appendChild(td);
+
+			//-------------------------
+			//Месяц и год
+			td=document.createElement('td');
+			td.colSpan='5';
+			td.style.fontWeight='700';
+			tr.appendChild(td);
+
+			//-------------------------
+			//Стрелка вправо
+			td=document.createElement('td');
+			td.className='arrow Next';
+			td.innerHTML='⇨';
+			tr.appendChild(td);
+
+			//-------------------------
+			//Дни недели
+			tr=document.createElement('tr');
+			tb.appendChild(tr);
+			for (i=0;i<7;i++){
+					td=document.createElement('td');
+					tr.appendChild(td);	
+				}
+
+			//-------------------------
+			//Числа
+			for(var i=0;i<6;i++){
+				tr=document.createElement('tr');
+				tb.appendChild(tr);
+				for(var j=0; j<7;j++){
+					td=document.createElement('td')
+					tr.appendChild(td);
+				}
+			}
+		}
+		calendar();
+		filling();
+
+		//-------------------------
+		//Заполнение календаря
+		function filling(){
+			//Месяц и год
+			tb.children[1].children[1].innerHTML=months[month]+', '+year;
+
+			//Дни недели
+			for (i=0;i<7;i++){
+				tb.children[2].children[i].innerHTML=days[i];
+			}
+
+			//Числа
+			d.setMonth(month);
+			d.setDate(1);
+			var day=d.getDay();
+			day=(6+day) % 7 +1;
+			d.setDate(d.getDate()-day);
+			for(var i=3;i<9;i++){
+				for(var j=0; j<7;j++){
+					d.setDate(d.getDate()+1);
+					if (d.getDate()==dat && d.getMonth()==currentMonth && d.getFullYear()==currentYear)
+						tb.children[i].children[j].className="today";
+					else 
+						tb.children[i].children[j].className="";
+					if (d.getMonth()==month){
+					if (j>=5) 
+						tb.children[i].children[j].className="weekend";
+					tb.children[i].children[j].innerHTML=d.getDate();
+					}
+				else{
+					tb.children[i].children[j].className="gray";
+					tb.children[i].children[j].innerHTML=d.getDate();
+				}
+				}
+			}
+		}
+
+		//-------------------------
+		//Стрелки
+		document.querySelector('.Prev').onclick = function() {
+	    	//Влево
+	    	if (month==0){
+	    		month=11;
+	    		year-=1;
+	    	}
+	    	else
+	    		month-=1;
+	    	d.setFullYear(year);
+	    	d.setMonth(month);
+	    	filling();
+	    }
+		document.querySelector('.Next').onclick = function() {
+	    	//Вправо
+	    	if (month==11){
+	    		month=0;
+	    		year+=1;
+	    	}
+	    	else
+	    		month+=1;
+	    	d.setFullYear(year);
+	    	d.setMonth(month);
+	    	filling();
+	    }
+	</script>
+</body>
+</html>
