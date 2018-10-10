@@ -1,0 +1,3 @@
+function create_area(){
+  var tb=document.createElement('table');
+}
