@@ -5,7 +5,7 @@ class gameArea{
     this.areaSizeX=8;//size of gameSpace for x coordinate
     this.areaSizeY=8;//size of gameSpace for y coordinate
     this.IdCell=0;
-    this.Id='Minesweeper';
+    this.Id='Sapper';
   }
   getBombsNum(){//get for bomb number
     return this.bombs;
@@ -41,7 +41,9 @@ class gameArea{
         num++;//an increase of bomb number that already placed
         cell.Id=this.IdCell;
         this.IdCell++;
-        cell.onclick=function(){alert(cell.status)};//put the bomb inside Cell
+        cell.onclick=function(){alert(cell.status)};
+        //put the bomb inside Cell
+
       cell.createCell(tr);
       }
     }
