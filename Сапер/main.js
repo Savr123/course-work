@@ -60,7 +60,7 @@ class gameArea{
       }
     }
     //Put bomb inside the cell
-    cell.bombPlace(tb);
+    cell.bombspawn(tb);
     area.appendChild(tb);
   }
   //
@@ -102,29 +102,30 @@ class Cell extends gameArea{
     var t=this;
     td.onclick=function(){
       alert(t.status);
-      alert(t.num);
+      //alert(t.num);
     }
   }
   explosion(){
   }
-  //here we jst spawn bomb inside bombObj
-  bombspawn(tb){
+  //here we just spawn bomb inside bombObj
+  bombspawn(){
     var x,y;
+    var tb1=document.getElementsByTagName('table');
+    var m=1;
     //alert(tb);
-    //while (m>0){
-      //if (this.IdX==x && this.IdY==y && this.status!=1){
-        this.status=1;
-        alert(x);
-        alert(this.status);
-        m=0;
-      //}
-    //}
+    while (m>0){
+      x=Math.floor(Math.random()*8);
+      y=Math.floor(Math.random()*8);
+      if (tb1.children[0].children[0].status=0){
+        tb1.children[0].children[0].status=1;
+        m-=m;
+      }
+    }
   }
   // here we will put the bomb inside the html cell element
   bombPlace(){
     var x,y;
-    var tb2=document.getElementsByTagName('table');
-    var tb1=tb2[0];
+    var tb1=document.getElementsByTagName('table');
     var m=1;
     while(m!=0){
       x=Math.floor(Math.random()*6);
