@@ -6,10 +6,9 @@ class gameArea{
     this.bombs=0; //number of bombs
     this.areaSizeX=8;//size of gameSpace for x coordinate
     this.areaSizeY=8;//size of gameSpace for y coordinate
-    this.IdXCell=0;
-    this.IdYCell=0;
     this.Id='Sapper';
-    this.matrix=new Array;
+    this.matrix=new Array();
+    this.mineNum=10;
   }
   getBombsNum(){//get for bomb number
     return this.bombs;
@@ -32,39 +31,67 @@ class gameArea{
   setId(Id){
     this.Id=Id;
   }
-  bombPlant(){
-    //
-  }
+
   matrixCells(){
-    for (i=0;i<this.areaSizeY;i++){
-      this.matrix=new Array
+    for (var i=0;i<this.areaSizeY+2;i++){
+      this.matrix[i]=new Array();
+      for (var j=0;j<this.areaSizeX+2;j++){
+        this.matrix[i][j]=new Cell;
+      }
     }
   }
+
   creation_area(){
     var area=document.getElementById(this.Id);
     var tb=document.createElement('table');
-    var num=1//number of bombs that already placed on the map
 
     for(var i=0;i<this.areaSizeY;i++){//height of table
       var tr=document.createElement('tr');
       tb.appendChild(tr);
       this.IdYCell++;
       for(var j=0;j<this.areaSizeX;j++){//width of table
-        var cell=new Cell;//create new obj Cell
-        num++;//an increase of bomb number that already placed
-        cell.IdY=this.IdYCell;
-        cell.IdX=this.IdXCell;
+        this.matrix[i][j].IdY=this.IdYCell;
+        this.matrix[i][j].IdX=this.IdXCell;
         this.IdXCell++;
         //Creating cell with or without bomb WHATEVER
-        cell.createCell(tr);
+        this.matrix[i][j].createCell(tr);
       }
     }
-    //Put bomb inside the cell
-    cell.bombspawn(tb);
     area.appendChild(tb);
   }
-  //
+
+  bombspawn(){
+    var i,j;
+    while (this.mineNum>0){
+      i=Math.floor(Math.random()*8+1)
+      j=Math.floor(Math.random()*8+1)
+      if (this.matrix[i][j].status!=-1){
+        this.matrix[i][j].status=-1;
+
+
+
+        this.mineNum-=1;
+      }
+    }
+  }
+  bombnumber(){
+    for (i=0;i<this.areaSizeY;i++)
+      for(j=0;j<this.areaSizeX;j++)
+        if (this.matrix[i][j].status!=-1){
+
+          this.matrix[i-1][j-1].status==-1;
+          this.matrix[i-1][j].status==-1;
+          this.matrix[i-1][j+1].status==-1;
+          this.matrix[i][j-1].status==-1;
+          this.matrix[i][j+1].status==-1;
+          this.matrix[i+1][j-1].status==-1;
+          this.matrix[i+1][j].status==-1;
+          this.matrix[i+1][j+1].status==-1;
+
+        }
+  }
 }
+
 class Cell extends gameArea{
 
   constructor(){
@@ -88,57 +115,22 @@ class Cell extends gameArea{
   setCellColor(color){
     this.color=color;
   }
-
   getCellColor(){
     return this.color;
   }
   createCell(tr){
     var td=document.createElement('td');
-    td.style.backgroundColor=this.color;
-    td.style.cursor=this.cursor;
     tr.appendChild(td);
     this.IdX++;
 
     var t=this;
     td.onclick=function(){
-      alert(t.status);
-      //alert(t.num);
-    }
-  }
-  explosion(){
-  }
-  //here we just spawn bomb inside bombObj
-  bombspawn(){
-    var x,y;
-    var tb1=document.getElementsByTagName('table');
-    var m=1;
-    //alert(tb);
-    while (m>0){
-      x=Math.floor(Math.random()*8);
-      y=Math.floor(Math.random()*8);
-      if (tb1.children[0].children[0].status=0){
-        tb1.children[0].children[0].status=1;
-        m-=m;
+      switch(t.status){
+        case -1:
+          this.className='bomb';
+        case 1:
+          this.className='x1';
       }
     }
-  }
-  // here we will put the bomb inside the html cell element
-  bombPlace(){
-    var x,y;
-    var tb1=document.getElementsByTagName('table');
-    var m=1;
-    while(m!=0){
-      x=Math.floor(Math.random()*6);
-      y=Math.floor(Math.random()*6);
-      //if (this.IdX==x && this.IdY==y && this.status!=1){
-        this.status=1;
-        alert(x);
-        alert(this.status);
-        m=0;
-      //}
-    }
-  }
-  bombcheck(){
-
   }
 }

@@ -10,8 +10,14 @@ td{
   height: 50px;
   background-color: #000;
 }
-#Sapper{
+#Minesweeper{
   display: flex;
   justify-content: center;
   text-align: center;
+}
+.bomb{
+  background-color: red;
+}
+.x1{
+  background-color: blue;
 }
