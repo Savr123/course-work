@@ -44,16 +44,14 @@ class gameArea{
   creation_area(){
     var area=document.getElementById(this.Id);
     var tb=document.createElement('table');
-
-    for(var i=0;i<this.areaSizeY;i++){//height of table
+    for(var i=1;i<this.areaSizeY+1;i++){//height of table
       var tr=document.createElement('tr');
       tb.appendChild(tr);
       this.IdYCell++;
-      for(var j=0;j<this.areaSizeX;j++){//width of table
+      for(var j=1;j<this.areaSizeX+1;j++){//width of table
         this.matrix[i][j].IdY=this.IdYCell;
         this.matrix[i][j].IdX=this.IdXCell;
         this.IdXCell++;
-        //Creating cell with or without bomb WHATEVER
         this.matrix[i][j].createCell(tr);
       }
     }
@@ -63,31 +61,36 @@ class gameArea{
   bombspawn(){
     var i,j;
     while (this.mineNum>0){
-      i=Math.floor(Math.random()*8+1)
-      j=Math.floor(Math.random()*8+1)
+      i=Math.floor(Math.random()*7+1)
+      j=Math.floor(Math.random()*7+1)
       if (this.matrix[i][j].status!=-1){
         this.matrix[i][j].status=-1;
-
-
-
         this.mineNum-=1;
       }
     }
   }
+
   bombnumber(){
-    for (i=0;i<this.areaSizeY;i++)
-      for(j=0;j<this.areaSizeX;j++)
-        if (this.matrix[i][j].status!=-1){
-
-          this.matrix[i-1][j-1].status==-1;
-          this.matrix[i-1][j].status==-1;
-          this.matrix[i-1][j+1].status==-1;
-          this.matrix[i][j-1].status==-1;
-          this.matrix[i][j+1].status==-1;
-          this.matrix[i+1][j-1].status==-1;
-          this.matrix[i+1][j].status==-1;
-          this.matrix[i+1][j+1].status==-1;
-
+    var i,j;
+    for (i=1;i<this.areaSizeY+1;i++)
+      for(j=1;j<this.areaSizeX+1;j++)
+        if (this.matrix[i][j].status=-1){
+          if (this.matrix[i-1][j-1].status!=-1)
+            this.matrix[i-1][j-1].status+=1;
+          if (this.matrix[i-1][j].status!=-1)
+            this.matrix[i-1][j].status+=1;
+          if (this.matrix[i-1][j+1].status!=-1)
+            this.matrix[i-1][j+1].status+=1;
+          if (this.matrix[i][j-1].status!=-1)
+            this.matrix[i][j-1].status+=1;
+          if (this.matrix[i][j+1].status!=-1)
+            this.matrix[i][j+1].status+=1;
+          if (this.matrix[i+1][j-1].status!=-1)
+            this.matrix[i+1][j-1].status+=1;
+          if (this.matrix[i+1][j].status!=-1)
+            this.matrix[i+1][j].status+=1;
+          if (this.matrix[i+1][j+1].status!=-1)
+            this.matrix[i+1][j+1].status+=1;
         }
   }
 }
@@ -122,14 +125,21 @@ class Cell extends gameArea{
     var td=document.createElement('td');
     tr.appendChild(td);
     this.IdX++;
-
     var t=this;
     td.onclick=function(){
       switch(t.status){
         case -1:
           this.className='bomb';
+          break;
         case 1:
           this.className='x1';
+          break;
+        case 2:
+          this.className='x2';
+          break;
+        case 3:
+          this.className='x3';
+          break;
       }
     }
   }
