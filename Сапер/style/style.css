@@ -18,6 +18,9 @@ td{
 .bomb{
   background-color: red;
 }
+.x0{
+  background-color: gray;
+}
 .x1{
   background-color: blue;
 }
@@ -26,4 +29,10 @@ td{
 }
 .x3{
   background-color: yellow;
+}
+.x4{
+  background-color: brown;
+}
+.x5{
+  background-color: white;
 }

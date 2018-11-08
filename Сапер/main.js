@@ -3,18 +3,17 @@
 class gameArea{
 
   constructor(){
-    this.bombs=0; //number of bombs
+    this.bombNum=10; //number of bombs
     this.areaSizeX=8;//size of gameSpace for x coordinate
     this.areaSizeY=8;//size of gameSpace for y coordinate
-    this.Id='Sapper';
+    this.Id='Minesweeper';
     this.matrix=new Array();
-    this.mineNum=10;
   }
   getBombsNum(){//get for bomb number
-    return this.bombs;
+    return this.bombNum;
   }
   setBombsNum(number){//set for bomb number
-    this.bombs=number;
+    this.bombNum=number;
   }
   getAreaSizeX(){//get number of Cells for width
     return  this.areaSizeX;
@@ -60,21 +59,19 @@ class gameArea{
 
   bombspawn(){
     var i,j;
-    while (this.mineNum>0){
-      i=Math.floor(Math.random()*7+1)
-      j=Math.floor(Math.random()*7+1)
+    //Спавним мины
+    while (this.bombNum>0){
+      i=Math.floor(Math.random()*7+1);
+      j=Math.floor(Math.random()*7+1);
       if (this.matrix[i][j].status!=-1){
         this.matrix[i][j].status=-1;
-        this.mineNum-=1;
+        this.bombNum-=1;
       }
     }
-  }
-
-  bombnumber(){
-    var i,j;
+    //Спавним циферки
     for (i=1;i<this.areaSizeY+1;i++)
       for(j=1;j<this.areaSizeX+1;j++)
-        if (this.matrix[i][j].status=-1){
+        if (this.matrix[i][j].status==-1){
           if (this.matrix[i-1][j-1].status!=-1)
             this.matrix[i-1][j-1].status+=1;
           if (this.matrix[i-1][j].status!=-1)
@@ -131,6 +128,9 @@ class Cell extends gameArea{
         case -1:
           this.className='bomb';
           break;
+        case 0:
+          this.className='x0';
+          break;
         case 1:
           this.className='x1';
           break;
@@ -140,6 +140,11 @@ class Cell extends gameArea{
         case 3:
           this.className='x3';
           break;
+          case 4:
+          this.className='x4';
+          break;
+        default:
+          this.className='x5';
       }
     }
   }
