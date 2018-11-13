@@ -3,7 +3,7 @@
 class gameArea{
 
   constructor(){
-    this.bombNum=10; //number of bombs
+    this.bombNum=5; //number of bombs
     this.areaSizeX=8;//size of gameSpace for x coordinate
     this.areaSizeY=8;//size of gameSpace for y coordinate
     this.Id='Minesweeper';
@@ -43,6 +43,10 @@ class gameArea{
   creation_area(){
     var area=document.getElementById(this.Id);
     var tb=document.createElement('table');
+    tb.onclick=function(){
+      i=this
+      boardclear(i,j);
+    }
     for(var i=1;i<this.areaSizeY+1;i++){//height of table
       var tr=document.createElement('tr');
       tb.appendChild(tr);
@@ -89,6 +93,44 @@ class gameArea{
           if (this.matrix[i+1][j+1].status!=-1)
             this.matrix[i+1][j+1].status+=1;
         }
+  }
+
+  boardclear(i,j){
+    for (i=1;i<this.areaSizeY+1;i++)
+      for(j=1;j<this.areaSizeX+1;j++){
+        if (this.matrix[i-1][j-1].status==0){
+          this.className="x0";
+          boardclear(i-1,j-1);
+        }
+        if (this.matrix[i-1][j].status==0){
+          this.className="x0";
+          boardclear(i-1,j-1);
+        }
+        if (this.matrix[i-1][j+1].status==0){
+          this.className="x0";
+          boardclear(i-1,j+1);
+        }
+        if (this.matrix[i][j-1].status==0){
+          this.className="x0";
+          boardclear(i,j-1);
+        }
+        if (this.matrix[i][j+1].status==0){
+          this.className="x0";
+          boardclear(i,j+1);
+        }
+        if (this.matrix[i+1][j-1].status==0){
+          this.className="x0";
+          boardclear(i+1,j-1);
+        }
+        if (this.matrix[i+1][j].status==0){
+          this.className="x0";
+          boardclear(i+1,j);
+        }
+        if (this.matrix[i+1][j+1].status==0){
+          this.className="x0";
+          boardclear(i+1,j+1);
+        }
+      }
   }
 }
 
